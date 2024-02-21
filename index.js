@@ -1,9 +1,11 @@
 import express from "express";
 import { v4 } from "uuid";
+import cors from "cors";
 
 const port = 3005;
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const orders = [];
 
@@ -36,20 +38,21 @@ app.get("/order", (request, response) => {
 //Rotas do tipos POST
 app.post("/order", methodAndUrl, (request, response) => {
   const status = "Preparação";
-  const { order, clienteName, price } = request.body;
+  const { order, clientName, price } = request.body;
 
-  const pedidos = { id: v4(), order, clienteName, price, status };
+  const pedidos = { id: v4(), order, clientName, price, status };
+
   orders.push(pedidos);
 
   return response.status(201).json(pedidos);
 });
 //ordern do tipo PUT
 app.put("/order/:id", checkId, (request, response) => {
-  const { order, clienteName, price } = request.body;
+  const { order, clientName, price } = request.body;
   const index = request.orderIndex;
   const id = request.orderId;
 
-  const updateOrder = { id, order, clienteName, price };
+  const updateOrder = { id, order, clientName, price };
 
   orders[index] = updateOrder;
 
